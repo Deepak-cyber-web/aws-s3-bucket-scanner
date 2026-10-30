@@ -1,0 +1,191 @@
+{
+  "metadata": {
+    "tool": "S3 Security Auditor",
+    "version": "0.1.0",
+    "scan_time": "2026-09-02T03:38:33Z"
+  },
+  "account": "799517333938",
+  "identity": "arn:aws:iam::799517333938:user/s3-auditor",
+  "buckets": [
+    {
+      "name": "s3-audit-private-deepak-2026",
+      "creation_date": "2026-09-01T15:47:10+00:00",
+      "region": "ap-south-1"
+    }
+  ],
+  "findings": [
+    {
+      "finding_id": "S3-001",
+      "bucket": "s3-audit-private-deepak-2026",
+      "check_name": "public_access",
+      "status": "FAIL",
+      "severity": "HIGH",
+      "title": "Block Public Access is not fully enforced",
+      "description": "One or more Block Public Access protections are disabled for the bucket.",
+      "evidence": {
+        "disabled_settings": [
+          "BlockPublicAcls",
+          "IgnorePublicAcls",
+          "BlockPublicPolicy",
+          "RestrictPublicBuckets"
+        ],
+        "config": {
+          "BlockPublicAcls": false,
+          "IgnorePublicAcls": false,
+          "BlockPublicPolicy": false,
+          "RestrictPublicBuckets": false
+        }
+      },
+      "recommendation": "Enable all Block Public Access settings for the bucket.",
+      "remediation_available": true,
+      "remediation_action": "Enable Block Public Access",
+      "aws_api": "s3.get_public_access_block() / s3.put_public_access_block()",
+      "timestamp": "2026-09-02T03:38:33Z"
+    },
+    {
+      "finding_id": "S3-002",
+      "bucket": "s3-audit-private-deepak-2026",
+      "check_name": "bucket_policy",
+      "status": "PASS",
+      "severity": "HIGH",
+      "title": "No bucket policy is attached",
+      "description": "The bucket does not currently have a bucket policy.",
+      "evidence": {
+        "error_code": "NoSuchBucketPolicy"
+      },
+      "recommendation": "Continue to audit future bucket policy changes.",
+      "remediation_available": false,
+      "remediation_action": "",
+      "aws_api": "s3.get_bucket_policy()",
+      "timestamp": "2026-09-02T03:38:33Z"
+    },
+    {
+      "finding_id": "S3-003",
+      "bucket": "s3-audit-private-deepak-2026",
+      "check_name": "acl",
+      "status": "ERROR",
+      "severity": "MEDIUM",
+      "title": "Unable to review bucket ACL",
+      "description": "The scanner could not retrieve the bucket ACL from AWS.",
+      "evidence": {
+        "error_code": "AccessDenied",
+        "error_message": "An error occurred (AccessDenied) when calling the GetBucketAcl operation: User: arn:aws:iam::799517333938:user/s3-auditor is not authorized to perform: s3:GetBucketAcl on resource: \"arn:aws:s3:::s3-audit-private-deepak-2026\" because no identity-based policy allows the s3:GetBucketAcl action"
+      },
+      "recommendation": "Verify IAM access and bucket existence before interpreting the ACL result.",
+      "remediation_available": false,
+      "remediation_action": "",
+      "aws_api": "s3.get_bucket_acl()",
+      "timestamp": "2026-09-02T03:38:33Z"
+    },
+    {
+      "finding_id": "S3-004",
+      "bucket": "s3-audit-private-deepak-2026",
+      "check_name": "encryption",
+      "status": "PASS",
+      "severity": "MEDIUM",
+      "title": "Default encryption is enabled",
+      "description": "The bucket has a default encryption rule configured.",
+      "evidence": {
+        "rules": [
+          {
+            "ApplyServerSideEncryptionByDefault": {
+              "SSEAlgorithm": "AES256"
+            },
+            "BucketKeyEnabled": true,
+            "BlockedEncryptionTypes": {
+              "EncryptionType": [
+                "SSE-C"
+              ]
+            }
+          }
+        ]
+      },
+      "recommendation": "Continue to review whether SSE-S3 or SSE-KMS fits the security requirement.",
+      "remediation_available": true,
+      "remediation_action": "Keep or adjust default encryption",
+      "aws_api": "s3.get_bucket_encryption()",
+      "timestamp": "2026-09-02T03:38:33Z"
+    },
+    {
+      "finding_id": "S3-005",
+      "bucket": "s3-audit-private-deepak-2026",
+      "check_name": "versioning",
+      "status": "FAIL",
+      "severity": "MEDIUM",
+      "title": "Versioning is disabled",
+      "description": "The bucket does not currently have versioning enabled.",
+      "evidence": {
+        "status": null
+      },
+      "recommendation": "Enable versioning to preserve previous object versions and improve recovery options.",
+      "remediation_available": true,
+      "remediation_action": "Enable versioning",
+      "aws_api": "s3.put_bucket_versioning()",
+      "timestamp": "2026-09-02T03:38:33Z"
+    },
+    {
+      "finding_id": "S3-006",
+      "bucket": "s3-audit-private-deepak-2026",
+      "check_name": "logging",
+      "status": "FAIL",
+      "severity": "LOW",
+      "title": "Server access logging is not enabled",
+      "description": "The bucket does not have S3 server access logging configured.",
+      "evidence": {
+        "logging_enabled": false
+      },
+      "recommendation": "Configure server access logging to a dedicated logging bucket to record access events.",
+      "remediation_available": true,
+      "remediation_action": "Enable server access logging",
+      "aws_api": "s3.put_bucket_logging()",
+      "timestamp": "2026-09-02T03:38:33Z"
+    },
+    {
+      "finding_id": "S3-007",
+      "bucket": "s3-audit-private-deepak-2026",
+      "check_name": "ownership",
+      "status": "ERROR",
+      "severity": "MEDIUM",
+      "title": "Unable to verify ownership controls",
+      "description": "The scanner encountered a client-side or AWS-side issue while retrieving ownership controls.",
+      "evidence": {
+        "error_code": "AccessDenied",
+        "error_message": "An error occurred (AccessDenied) when calling the GetBucketOwnershipControls operation: User: arn:aws:iam::799517333938:user/s3-auditor is not authorized to perform: s3:GetBucketOwnershipControls on resource: \"arn:aws:s3:::s3-audit-private-deepak-2026\" because no identity-based policy allows the s3:GetBucketOwnershipControls action"
+      },
+      "recommendation": "Verify bucket region, permissions, and AWS API availability before relying on the result.",
+      "remediation_available": false,
+      "remediation_action": "",
+      "aws_api": "s3.get_bucket_ownership_controls()",
+      "timestamp": "2026-09-02T03:38:33Z"
+    },
+    {
+      "finding_id": "S3-008",
+      "bucket": "s3-audit-private-deepak-2026",
+      "check_name": "secure_transport",
+      "status": "FAIL",
+      "severity": "MEDIUM",
+      "title": "Bucket policy does not enforce HTTPS",
+      "description": "No bucket policy exists, so there is no HTTPS enforcement.",
+      "evidence": {
+        "error_code": "NoSuchBucketPolicy"
+      },
+      "recommendation": "Add a bucket policy with a Deny statement for aws:SecureTransport == false.",
+      "remediation_available": true,
+      "remediation_action": "Add secure transport policy condition",
+      "aws_api": "s3.get_bucket_policy()",
+      "timestamp": "2026-09-02T03:38:33Z"
+    }
+  ],
+  "summary": {
+    "passed": 2,
+    "failed": 4,
+    "errors": 2,
+    "critical": 0,
+    "high": 2,
+    "medium": 5,
+    "low": 1,
+    "info": 0
+  },
+  "region": "ap-south-1",
+  "security_score": 55
+}

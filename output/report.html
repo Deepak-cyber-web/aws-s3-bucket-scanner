@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>AWS S3 Security Audit</title>
+    <style>
+      body { font-family: Arial, sans-serif; margin: 2rem; color: #1f2933; }
+      h1, h2 { color: #102a43; }
+      .meta { background: #f5f7fa; padding: 1rem; border-radius: 8px; margin-bottom: 1rem; }
+      .summary { display: flex; gap: 1rem; flex-wrap: wrap; margin: 1rem 0; }
+      .card { background: #eef3f8; border: 1px solid #dfe6ee; border-radius: 8px; padding: 0.75rem 1rem; }
+      table { border-collapse: collapse; width: 100%; margin-top: 1rem; }
+      th, td { border: 1px solid #d6dee5; padding: 0.6rem; text-align: left; vertical-align: top; }
+      th { background: #eaf0f6; }
+      .pass { color: #055b2d; }
+      .fail { color: #b42318; }
+      .error { color: #7a2e0d; }
+    </style>
+  </head>
+  <body>
+    <h1>AWS S3 Security Audit</h1>
+    <div class="meta">
+      <p><strong>Account:</strong> 799517333938</p>
+      <p><strong>Identity:</strong> arn:aws:iam::799517333938:user/s3-auditor</p>
+      <p><strong>Region:</strong> ap-south-1</p>
+      <p><strong>Scan time:</strong> 2026-09-01T17:25:27Z</p>
+      <p><strong>Tool version:</strong> 0.1.0</p>
+    </div>
+
+    <h2>Executive summary</h2>
+    <div class="summary">
+      <div class="card"><strong>Buckets scanned:</strong> 1</div>
+      <div class="card"><strong>Passed:</strong> 2</div>
+      <div class="card"><strong>Failed:</strong> 4</div>
+      <div class="card"><strong>Errors:</strong> 2</div>
+      <div class="card"><strong>Security score:</strong> 55</div>
+    </div>
+
+    <h2>Severity summary</h2>
+    <table>
+      <tr><th>Critical</th><td>0</td></tr>
+      <tr><th>High</th><td>2</td></tr>
+      <tr><th>Medium</th><td>5</td></tr>
+      <tr><th>Low</th><td>1</td></tr>
+    </table>
+
+    <h2>Bucket-by-bucket results</h2>
+    <table>
+      <tr><th>Bucket</th><th>Region</th><th>Status</th></tr>
+      
+        <tr>
+          <td>s3-audit-private-deepak-2026</td>
+          <td>ap-south-1</td>
+          <td>Review required</td>
+        </tr>
+      
+    </table>
+
+    <h2>Finding details</h2>
+    <table>
+      <tr><th>Finding ID</th><th>Bucket</th><th>Title</th><th>Severity</th><th>Status</th><th>Evidence</th><th>Recommendation</th></tr>
+      
+        <tr>
+          <td>S3-001</td>
+          <td>s3-audit-private-deepak-2026</td>
+          <td>Block Public Access is not fully enforced</td>
+          <td>HIGH</td>
+          <td class="fail">FAIL</td>
+          <td>{&#39;disabled_settings&#39;: [&#39;BlockPublicAcls&#39;, &#39;IgnorePublicAcls&#39;, &#39;BlockPublicPolicy&#39;, &#39;RestrictPublicBuckets&#39;], &#39;config&#39;: {&#39;BlockPublicAcls&#39;: False, &#39;IgnorePublicAcls&#39;: False, &#39;BlockPublicPolicy&#39;: False, &#39;RestrictPublicBuckets&#39;: False}}</td>
+          <td>Enable all Block Public Access settings for the bucket.</td>
+        </tr>
+      
+        <tr>
+          <td>S3-002</td>
+          <td>s3-audit-private-deepak-2026</td>
+          <td>No bucket policy is attached</td>
+          <td>HIGH</td>
+          <td class="pass">PASS</td>
+          <td>{&#39;error_code&#39;: &#39;NoSuchBucketPolicy&#39;}</td>
+          <td>Continue to audit future bucket policy changes.</td>
+        </tr>
+      
+        <tr>
+          <td>S3-003</td>
+          <td>s3-audit-private-deepak-2026</td>
+          <td>Unable to review bucket ACL</td>
+          <td>MEDIUM</td>
+          <td class="error">ERROR</td>
+          <td>{&#39;error_code&#39;: &#39;AccessDenied&#39;, &#39;error_message&#39;: &#39;An error occurred (AccessDenied) when calling the GetBucketAcl operation: User: arn:aws:iam::799517333938:user/s3-auditor is not authorized to perform: s3:GetBucketAcl on resource: &#34;arn:aws:s3:::s3-audit-private-deepak-2026&#34; because no identity-based policy allows the s3:GetBucketAcl action&#39;}</td>
+          <td>Verify IAM access and bucket existence before interpreting the ACL result.</td>
+        </tr>
+      
+        <tr>
+          <td>S3-004</td>
+          <td>s3-audit-private-deepak-2026</td>
+          <td>Default encryption is enabled</td>
+          <td>MEDIUM</td>
+          <td class="pass">PASS</td>
+          <td>{&#39;rules&#39;: [{&#39;ApplyServerSideEncryptionByDefault&#39;: {&#39;SSEAlgorithm&#39;: &#39;AES256&#39;}, &#39;BucketKeyEnabled&#39;: True, &#39;BlockedEncryptionTypes&#39;: {&#39;EncryptionType&#39;: [&#39;SSE-C&#39;]}}]}</td>
+          <td>Continue to review whether SSE-S3 or SSE-KMS fits the security requirement.</td>
+        </tr>
+      
+        <tr>
+          <td>S3-005</td>
+          <td>s3-audit-private-deepak-2026</td>
+          <td>Versioning is disabled</td>
+          <td>MEDIUM</td>
+          <td class="fail">FAIL</td>
+          <td>{&#39;status&#39;: None}</td>
+          <td>Enable versioning to preserve previous object versions and improve recovery options.</td>
+        </tr>
+      
+        <tr>
+          <td>S3-006</td>
+          <td>s3-audit-private-deepak-2026</td>
+          <td>Server access logging is not enabled</td>
+          <td>LOW</td>
+          <td class="fail">FAIL</td>
+          <td>{&#39;logging_enabled&#39;: False}</td>
+          <td>Configure server access logging to a dedicated logging bucket to record access events.</td>
+        </tr>
+      
+        <tr>
+          <td>S3-007</td>
+          <td>s3-audit-private-deepak-2026</td>
+          <td>Unable to verify ownership controls</td>
+          <td>MEDIUM</td>
+          <td class="error">ERROR</td>
+          <td>{&#39;error_code&#39;: &#39;AccessDenied&#39;, &#39;error_message&#39;: &#39;An error occurred (AccessDenied) when calling the GetBucketOwnershipControls operation: User: arn:aws:iam::799517333938:user/s3-auditor is not authorized to perform: s3:GetBucketOwnershipControls on resource: &#34;arn:aws:s3:::s3-audit-private-deepak-2026&#34; because no identity-based policy allows the s3:GetBucketOwnershipControls action&#39;}</td>
+          <td>Verify bucket region, permissions, and AWS API availability before relying on the result.</td>
+        </tr>
+      
+        <tr>
+          <td>S3-008</td>
+          <td>s3-audit-private-deepak-2026</td>
+          <td>Bucket policy does not enforce HTTPS</td>
+          <td>MEDIUM</td>
+          <td class="fail">FAIL</td>
+          <td>{&#39;error_code&#39;: &#39;NoSuchBucketPolicy&#39;}</td>
+          <td>Add a bucket policy with a Deny statement for aws:SecureTransport == false.</td>
+        </tr>
+      
+    </table>
+
+    <footer style="margin-top:2rem; color:#52606d;">
+      Generated by S3 Security Auditor
+    </footer>
+  </body>
+</html>

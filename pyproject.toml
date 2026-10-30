@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "s3-security-auditor"
+version = "0.1.0"
+description = "AWS S3 Security Misconfiguration Auditor"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+  "boto3>=1.34.0",
+  "jinja2>=3.1.0",
+  "PyYAML>=6.0",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+
+[tool.setuptools]
+packages = ["s3_auditor", "s3_auditor.checks", "s3_auditor.reporting", "s3_auditor.remediation"]

@@ -1,0 +1,16 @@
+scan:
+  fail_on:
+    - CRITICAL
+    - HIGH
+  checks:
+    - public_access
+    - bucket_policy
+    - acl
+    - encryption
+    - versioning
+    - logging
+    - ownership
+    - secure_transport
+
+report:
+  output_dir: output
